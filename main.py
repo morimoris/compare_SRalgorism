@@ -13,7 +13,7 @@ if __name__ == "__main__":
     parser.add_argument('--train_width', type = int, default = 50, help = "Train data HR size(width)")
     parser.add_argument('--test_height', type = int, default = 360, help = "Test data HR size(height)")
     parser.add_argument('--test_width', type = int, default = 640, help = "Test data HR size(width)")
-    parser.add_argument('--train_dataset_num', type = int, default = 10000, help = "Number of train datasets to generate")
+    parser.add_argument('--train_dataset_num', type = int, default = 30000, help = "Number of train datasets to generate")
     parser.add_argument('--test_dataset_num', type = int, default = 5, help = "Number of test datasets to generate")
     parser.add_argument('--train_cut_num', type = int, default = 10, help = "Number of train data to be generated from a single image")
     parser.add_argument('--test_cut_num', type = int, default = 1, help = "Number of test data to be generated from a single image")
@@ -61,9 +61,9 @@ if __name__ == "__main__":
         np.savez(path, test_x, test_y)
 
     elif args.mode == "train_srcnn": #学習
-        npz = np.load("train_data_same_size.npz")
-        train_x = npz["arr_0"]
-        train_y = npz["arr_1"]
+        npz = np.load("train_data_list.npz")
+        train_x = npz["arr_0"]  #same size dataset
+        train_y = npz["arr_2"]
 
         train_x = tf.convert_to_tensor(train_x, np.float32)
         train_y = tf.convert_to_tensor(train_y, np.float32)
@@ -82,9 +82,9 @@ if __name__ == "__main__":
         train_model.save("model/SRCNN_model.h5")
 
     elif args.mode == "train_fsrcnn": #学習
-        npz = np.load("train_data_differnt_size.npz")
-        train_x = npz["arr_0"]
-        train_y = npz["arr_1"]
+        npz = np.load("train_data_list.npz")
+        train_x = npz["arr_1"]
+        train_y = npz["arr_2"]
 
         train_x = tf.convert_to_tensor(train_x, np.float32)
         train_y = tf.convert_to_tensor(train_y, np.float32)

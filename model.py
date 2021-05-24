@@ -1,6 +1,6 @@
 import tensorflow as tf
 from tensorflow.python.keras.models import Model
-from tensorflow.python.keras.layers import Conv2D, Conv2DTranspose, Input, Add, Multiply, Concatenate, Average, Lambda
+from tensorflow.python.keras.layers import Conv2D, Conv2DTranspose, Input, Add, Multiply, Concatenate, Average, Lambda, ReLU
 import MyPReLU
 
 #Single image super resolution
@@ -149,26 +149,27 @@ class Single_SR():
         #convolution part   
         conv = input_shape
         for i in range(conv_num):
-            conv = Conv2D(filters = filter_num, kernel_size = kernel_size, padding = "same", activation = "relu")(conv)
+            conv = Conv2D(filters = filter_num, kernel_size = kernel_size, padding = "same")(conv)
 
             if i % 2 == 1 and i != conv_num - 1:
                 skip_connection_list[(i // 2 + 1)] = conv
 
         #deconvolution part
         for i in range(deconv_num - 1):
-            conv = Conv2DTranspose(filters = filter_num, kernel_size = kernel_size, padding = "same", activation = "relu")(conv)
+            conv = Conv2DTranspose(filters = filter_num, kernel_size = kernel_size, padding = "same")(conv)
             
             #add skip connections
             if i % 2 == 1:
                 deconv_skip = Add()([conv, skip_connection_list[-1 * (i // 2 + 1)]])
-                conv = deconv_skip
+                conv = ReLU()(deconv_skip)
 
-        conv = Conv2DTranspose(filters = self.input_channels, kernel_size = kernel_size, padding = "same", activation = "relu")(conv)
+        conv = Conv2DTranspose(filters = self.input_channels, kernel_size = kernel_size, padding = "same")(conv)
+        #add skip connections
         deconv_skip = Add()([conv, skip_connection_list[0]])
+        Output = ReLU()(deconv_skip)
 
-        model = Model(inputs = input_shape, outputs = deconv_skip)
+        model = Model(inputs = input_shape, outputs = Output)
         model.summary()
-
         return model
         
 class Video_SR():
