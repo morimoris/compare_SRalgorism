@@ -31,18 +31,16 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    if args.mode == 'train_datacreate': #学習用データセットの生成
-        #LR.shape != HR.shape datacreate
-        train_same_x, train_dif_x, train_y = data_create.datacreate().train_datacreate(args.train_path,       #切り取る動画のpath
-                                            args.train_dataset_num,                                          #データセットの生成数
-                                            args.train_cut_num,                                              #1枚の画像から生成するデータの数
-                                            args.train_height,                                               #保存サイズ
+    if args.mode == 'train_datacreate': #Create train same and different size datasets
+        train_same_x, train_dif_x, train_y = data_create.datacreate().train_datacreate(args.train_path,      #Path where training data is stored
+                                            args.train_dataset_num,                                          #Number of train datasets
+                                            args.train_cut_num,                                              #Number of data to be generated from a single image
+                                            args.train_height,                                               #Save size
                                             args.train_width)   
         path = "train_data_list"
         np.savez(path, train_same_x, train_dif_x, train_y)
 
-    elif args.mode == 'test_datacreate': #評価用データセットの生成
-        #LR.shape != HR.shape datacreate
+    elif args.mode == 'test_datacreate': #Create evaluate datasets
         test_x, test_y = data_create.datacreate().datacreate_different_size(args.test_path,
                                             args.test_dataset_num,
                                             args.test_cut_num,
@@ -51,7 +49,6 @@ if __name__ == "__main__":
         path = "test_data_differnt_size"
         np.savez(path, test_x, test_y)
 
-        #LR.shape == HR.shape datacreate
         test_x, test_y = data_create.datacreate().datacreate_same_size(args.test_path,
                                             args.test_dataset_num,
                                             args.test_cut_num,
@@ -60,9 +57,9 @@ if __name__ == "__main__":
         path = "test_data_same_size"
         np.savez(path, test_x, test_y)
 
-    elif args.mode == "train_srcnn": #学習
+    elif args.mode == "train_srcnn": #train
         npz = np.load("train_data_list.npz")
-        train_x = npz["arr_0"]  #same size dataset
+        train_x = npz["arr_0"]  #same size datasets
         train_y = npz["arr_2"]
 
         train_x = tf.convert_to_tensor(train_x, np.float32)
@@ -81,9 +78,9 @@ if __name__ == "__main__":
         os.makedirs("model", exist_ok = True)
         train_model.save("model/SRCNN_model.h5")
 
-    elif args.mode == "train_fsrcnn": #学習
+    elif args.mode == "train_fsrcnn": #train
         npz = np.load("train_data_list.npz")
-        train_x = npz["arr_1"]
+        train_x = npz["arr_1"] #different size datasets
         train_y = npz["arr_2"]
 
         train_x = tf.convert_to_tensor(train_x, np.float32)
@@ -103,9 +100,9 @@ if __name__ == "__main__":
         train_model.save("model/FSRCNN_model.h5")
 
 
-    elif args.mode == "train_espcn": #学習
+    elif args.mode == "train_espcn": #train
         npz = np.load("train_data_list.npz")
-        train_x = npz["arr_1"]
+        train_x = npz["arr_1"] #different size dataset
         train_y = npz["arr_2"]
 
         train_x = tf.convert_to_tensor(train_x, np.float32)
@@ -123,7 +120,7 @@ if __name__ == "__main__":
         os.makedirs("model", exist_ok = True)
         train_model.save("model/ESPCN_model.h5")
 
-    elif args.mode == "train_vdsr": #学習
+    elif args.mode == "train_vdsr": #train
         npz = np.load("train_data_same_size.npz")
         train_x = npz["arr_0"]
         train_y = npz["arr_1"]
@@ -144,8 +141,6 @@ if __name__ == "__main__":
         train_model.save("model/VDSR_model.h5")
 
     elif args.mode == "train_drcn": #学習
-        # gpu_options = tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=0.80)
-        # sess = tf.compat.v1.Session(config=tf.compat.v1.ConfigProto(gpu_options=gpu_options))
 
         npz = np.load("train_data_list.npz")
         train_x = npz["arr_0"]
