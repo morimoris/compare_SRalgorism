@@ -104,9 +104,9 @@ if __name__ == "__main__":
 
 
     elif args.mode == "train_espcn": #学習
-        npz = np.load("train_data_differnt_size.npz")
-        train_x = npz["arr_0"]
-        train_y = npz["arr_1"]
+        npz = np.load("train_data_list.npz")
+        train_x = npz["arr_1"]
+        train_y = npz["arr_2"]
 
         train_x = tf.convert_to_tensor(train_x, np.float32)
         train_y = tf.convert_to_tensor(train_y, np.float32)
@@ -147,9 +147,9 @@ if __name__ == "__main__":
         # gpu_options = tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=0.80)
         # sess = tf.compat.v1.Session(config=tf.compat.v1.ConfigProto(gpu_options=gpu_options))
 
-        npz = np.load("train_data_same_size.npz")
+        npz = np.load("train_data_list.npz")
         train_x = npz["arr_0"]
-        train_y = npz["arr_1"]
+        train_y = npz["arr_2"]
 
         train_x = tf.convert_to_tensor(train_x, np.float32)
         train_y = tf.convert_to_tensor(train_y, np.float32)
