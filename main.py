@@ -121,9 +121,9 @@ if __name__ == "__main__":
         train_model.save("model/ESPCN_model.h5")
 
     elif args.mode == "train_vdsr": #train
-        npz = np.load("train_data_same_size.npz")
-        train_x = npz["arr_0"]
-        train_y = npz["arr_1"]
+        npz = np.load("train_data_list.npz")
+        train_x = npz["arr_0"] #same size datasets
+        train_y = npz["arr_2"]
 
         train_x = tf.convert_to_tensor(train_x, np.float32)
         train_y = tf.convert_to_tensor(train_y, np.float32)
@@ -140,10 +140,10 @@ if __name__ == "__main__":
         os.makedirs("model", exist_ok = True)
         train_model.save("model/VDSR_model.h5")
 
-    elif args.mode == "train_drcn": #学習
+    elif args.mode == "train_drcn": #train
 
         npz = np.load("train_data_list.npz")
-        train_x = npz["arr_0"]
+        train_x = npz["arr_0"] #same size datasets
         train_y = npz["arr_2"]
 
         train_x = tf.convert_to_tensor(train_x, np.float32)
@@ -161,10 +161,10 @@ if __name__ == "__main__":
         os.makedirs("model", exist_ok = True)
         train_model.save("model/DRCN_model.h5")
 
-    elif args.mode == "train_red_net": #学習
-        npz = np.load("train_data_same_size.npz")
-        train_x = npz["arr_0"]
-        train_y = npz["arr_1"]
+    elif args.mode == "train_red_net": #train
+        npz = np.load("train_data_list.npz")
+        train_x = npz["arr_0"] #same size datasets
+        train_y = npz["arr_2"]
 
         train_x = tf.convert_to_tensor(train_x, np.float32)
         train_y = tf.convert_to_tensor(train_y, np.float32)
