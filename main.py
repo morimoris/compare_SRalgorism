@@ -181,10 +181,30 @@ if __name__ == "__main__":
         os.makedirs("model", exist_ok = True)
         train_model.save("model/RED_Net_model.h5")
 
-    elif args.mode == "train_vsrnet": #学習
-        npz = np.load("train_data_same_size.npz")
-        train_x = npz["arr_0"]
-        train_y = npz["arr_1"]
+    elif args.mode == "train_drrn": #train
+        npz = np.load("train_data_list.npz")
+        train_x = npz["arr_0"] #same size datasets
+        train_y = npz["arr_2"]
+
+        train_x = tf.convert_to_tensor(train_x, np.float32)
+        train_y = tf.convert_to_tensor(train_y, np.float32)
+
+        train_x /= 255
+        train_y /= 255
+
+        train_model = model.Single_SR().RED_Net()
+
+        optimizers = tf.keras.optimizers.Adam(lr = args.learning_rate)
+        train_model.compile(loss = "mean_squared_error", optimizer = optimizers, metrics = [psnr])
+
+        train_model.fit(train_x[args.LR_num // 2], train_y, epochs = args.EPOCHS, verbose = 2, batch_size = args.BATCH_SIZE)
+        os.makedirs("model", exist_ok = True)
+        train_model.save("model/drrn_model.h5")
+
+    elif args.mode == "train_vsrnet": #train
+        npz = np.load("train_data_list.npz")
+        train_x = npz["arr_0"] #same size datasets
+        train_y = npz["arr_2"]
 
         train_x = tf.convert_to_tensor(train_x, np.float32)
         train_y = tf.convert_to_tensor(train_y, np.float32)
@@ -201,10 +221,10 @@ if __name__ == "__main__":
         os.makedirs("model", exist_ok = True)
         train_model.save("model/VSRnet_model.h5")
 
-    elif args.mode == "train_rvsr": #学習
-        npz = np.load("train_data_differnt_size.npz")
-        train_x = npz["arr_0"]
-        train_y = npz["arr_1"]
+    elif args.mode == "train_rvsr": #train
+        npz = np.load("train_data_list.npz")
+        train_x = npz["arr_1"] #different size datasets
+        train_y = npz["arr_2"]
 
         train_x = tf.convert_to_tensor(train_x, np.float32)
         train_y = tf.convert_to_tensor(train_y, np.float32)
