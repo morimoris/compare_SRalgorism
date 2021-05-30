@@ -241,10 +241,10 @@ if __name__ == "__main__":
         os.makedirs("model", exist_ok = True)
         train_model.save("model/RVSR_model.h5")
 
-    elif args.mode == "train_vespcn": #学習
-        npz = np.load("train_data_differnt_size.npz")
-        train_x = npz["arr_0"]
-        train_y = npz["arr_1"]
+    elif args.mode == "train_vespcn": #train
+        npz = np.load("train_data_list.npz")
+        train_x = npz["arr_1"] #different size datasets
+        train_y = npz["arr_2"]
 
         train_x = tf.convert_to_tensor(train_x, np.float32)
         train_y = tf.convert_to_tensor(train_y, np.float32)
