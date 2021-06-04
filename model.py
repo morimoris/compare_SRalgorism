@@ -298,7 +298,7 @@ class Video_SR():
             input_list[img] = Input(shape = (None, None, self.input_channels), name = "input_" + str(img))
 
         #create output images
-        for num in range(0, input_LR_num // 2 + 1):
+        for num in range(input_LR_num // 2 + 1):
             output = RVSR_ESPCN(input_list[input_LR_num // 2 - num : input_LR_num // 2 + num + 1], self.input_channels, self.upsampling_scale)
             output_list[num] = output
         
