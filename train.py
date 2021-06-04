@@ -33,7 +33,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.mode == 'train_datacreate': #Create train same and different size datasets
-        train_same_x, train_dif_x, train_y = data_create.datacreate().train_datacreate(args.train_path,      #Path where training data is stored
+        train_same_x, train_dif_x, train_y = data_create.datacreate().datacreate(args.train_path,      #Path where training data is stored
                                             args.train_dataset_num,                                          #Number of train datasets
                                             args.train_cut_num,                                              #Number of data to be generated from a single image
                                             args.train_height,                                               #Save size
@@ -183,7 +183,7 @@ if __name__ == "__main__":
 
         train_model.fit(train_x[args.LR_num // 2], train_y, epochs = args.EPOCHS, verbose = 2, batch_size = args.BATCH_SIZE)
         os.makedirs("model", exist_ok = True)
-        train_model.save("model/drrn_model.h5")
+        train_model.save("model/DRRN_model.h5")
 
     elif args.mode == "train_vsrnet": #train
         npz = np.load("train_data_list.npz")

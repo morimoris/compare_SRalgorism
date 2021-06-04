@@ -226,29 +226,6 @@ class Video_SR():
         input_channels : channels of input_img.(gray → 1, RGB → 3)
         """
 
-    #DeepSR
-    def DeepSR(self, input_LR_num = 4):
-        #input video frames
-        input_list = input_LR_num * [None]
-        for img in range(input_LR_num): 
-            input_list[img] = Input(shape = (None, None, self.input_channels), name = "input_" + str(img))
-
-        #concatenate
-        input_shape = Concatenate()(input_list)
-
-        #convolution
-        conv2d_0 = Conv2D(filters = 256, kernel_size = (11, 11), padding = "same", activation = "tanh")(input_shape)
-        conv2d_1 = Conv2D(filters = 512, kernel_size = (1, 1), padding = "same", activation = "tanh")(conv2d_0)
-        conv2d_2 =  Conv2D(filters = 1, kernel_size = (3, 3), padding = "same", activation = "tanh")(conv2d_1)
-
-        #deconvolution
-        deconv2d_0 = Conv2DTranspose(filters = 1, kernel_size = (25, 25), strides = (1, 1), padding = "same")(conv2d_2)
-
-        model = Model(inputs = input_list, outputs = deconv2d_0)
-        model.summary()
-
-        return model
-
     #VSRnet model b
     def VSRnet(self, input_LR_num = 3):
         #input video frames
