@@ -14,15 +14,15 @@ class datacreate:
         self.low_dif_img_list = self.LR_num * [None]
         self.high_img_list = [None]
         
-    #任意のフレーム数を切り出すプログラム
+    #Function to generate an arbitrary number of datasets
     def datacreate(self,
-                        video_path,   #切り取る動画が入ったファイルのpath
-                        data_number,  #データセットの生成数
-                        cut_frame,    #1枚の画像から生成するデータセットの数
-                        cut_height,   #LRの保存サイズ
+                        video_path,   #Path where training data is stored
+                        data_number,  #Number of train datasets
+                        cut_frame,    #Number of data to be generated from a single image
+                        cut_height,   #Save HR size
                         cut_width):
 
-        #データセットのリストを生成
+        #create dataset list
         low_same_data_list = [[] for _ in range(self.LR_num)]
         low_dif_data_list = [[] for _ in range(self.LR_num)]  
         high_data_list = []

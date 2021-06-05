@@ -5,13 +5,6 @@ import os
 import numpy as np
 import tensorflow as tf
 
-# gpu_id = 0
-physical_devices = tf.config.list_physical_devices('GPU')
-if len(physical_devices) > 0:
-    for device in physical_devices:
-        tf.config.experimental.set_memory_growth(device, True)
-        print('{} memory growth: {}'.format(device, tf.config.experimental.get_memory_growth(device)))
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Tensorflow compare_super_resolution Example')
 
